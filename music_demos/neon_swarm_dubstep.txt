@@ -1,0 +1,158 @@
+# Neon Swarm - "Hive Mind". Heavy dubstep on the Neon Swarm leitmotif:
+# 140 BPM half-time, F# minor, every track on the built-in synth.
+#   intro:  bells and pads state the theme over a filtered beat, riser
+#   build:  snare roll 8ths -> 16ths -> 32nds, the filter opens, "drop" gap
+#   drop1:  half-time drums, wobble bass (quarter/eighth/triplet/16th rates),
+#           screech answers
+#   break:  the theme on a supersaw over pads, half drums
+#   build2: shorter, harder roll
+#   drop2:  faster wobbles, the theme screamed by the screech lead, double kicks
+#   outro:  the beat falls away, bells and a dying wobble
+# The full arrangement is the stand-alone demo (render without --variant);
+# variant "loop" is the boss-fight loop used by the game.
+title "Neon Swarm - Hive Mind"
+tempo 140
+time 4/4
+key F# minor
+
+track wob    synth=wobble oct=2 vol=112 reverb=8 duck=25 gate=96
+track wob2   synth=wobble oct=2 vol=96 transpose=12 pan=0 reverb=10 duck=25 gate=96 human=5 wobdepth=72 dist=85 detune=30 width=60
+track sub    synth=sub oct=1 vol=80 duck=30
+track screech synth=screech oct=4 vol=122 pan=10 reverb=35 delay=35 human=4
+track saw    synth=supersaw oct=5 vol=96 reverb=70 delay=30 duck=50 human=4
+track pad    synth=pad oct=4 vol=82 reverb=90 duck=70 gate=100
+track bells  synth=bell oct=5 vol=100 pan=-20 reverb=95 delay=60 human=6
+track arp    synth=pluck oct=4 vol=88 pan=25 reverb=50 delay=55 duck=40 gate=55 human=5
+track rise   synth=riser oct=4 vol=118 reverb=60 gate=100
+track drums  drums synth=drums vol=118 reverb=30 human=5
+
+prog drive = | F#m | D | A | E |
+pattern themeA = C#5q F#5e A5e~ A5e G#5e F#5e E5e | F#5q. D5e~ D5h | \
+                 C#5q E5e A5e~ A5e G#5e A5e B5e | G#5q. E5e~ E5h |
+pattern themeB = C#5q F#5e A5e~ A5e G#5e F#5e E5e | F#5q. A5e~ A5q D6q | \
+                 C#6e B5e A5e C#6e~ C#6q B5e A5e | G#5h B5h |
+pattern arp16  = 1s 5 8 10 12 10 8 5 1s 5 8 10 12 10 8 5
+pattern hold   = *w
+
+# wobble bass lines: each note restarts the LFO, the rate sets the rhythm
+pattern wobA = wobble=8 F#2q wobble=16 F#2q rq wobble=24 F#2e. wobble=32 F#3s | \
+               wobble=16 D2q. wobble=32 D2e rq wobble=8 D3q | \
+               wobble=24 A1q wobble=24 A1q wobble=16 A2q. wobble=32 A2e | \
+               wobble=8 E2h wobble=32 E2e E2e rq |
+pattern wobB = wobble=32 F#2e F#2e wobble=16 F#2q wobble=24 F#2q. rs wobble=32 C#3s | \
+               wobble=24 D2q wobble=48 D2q wobble=16 D3e D2e wobble=32 D2q | \
+               wobble=32 A1e A1e wobble=24 A1q wobble=48 A2q. rs wobble=32 A2s | \
+               wobble=16 E2q wobble=48 E2q wobble=24 E2q wobble=64 E3e E2e |
+# the screech answers in the gaps
+pattern scrA = rh. F#5e^ E5e^ | rh. A5s^ G#5s^ F#5e^ | rh. C#6e^ B5e^ | rh G#5q E5q |
+pattern scrB = C#5q F#5e A5e~ A5e G#5e F#5e E5e | F#5q. D5e~ D5h | \
+               C#5q E5e A5e~ A5e G#5e A5e B5e | G#5q. E5e~ E5q E6q |
+pattern subL = F#1w | D1w | A1w | E1w |
+
+# half-time beat: kick on 1, snare on 3
+grid half
+  kick   x.........x.....
+  snare  ........X.......
+  hat    x.x.x.x.x.x.x.xo
+grid halfC
+  crash  x...............
+  kick   x.........x.....
+  snare  ........X.......
+  hat    ..x.x.x.x.x.x.xo
+grid halfF
+  kick   x.........x..x..
+  snare  ........X...x.XX
+  hat    x.x.x.x.........
+grid heavy
+  kick   x..x......x.....
+  snare  ........X.......
+  clap   ........x.......
+  ohat   ..x...x...x...x.
+  hat    x...x...x...x...
+grid heavyC
+  crash  x...............
+  kick   x..x......x.....
+  snare  ........X.......
+  clap   ........x.......
+  ohat   ..x...x...x...x.
+grid heavyF
+  kick   x..x......x.x.xx
+  snare  ........X..xXXXX
+  clap   ........x.......
+  tom1   ....x...........
+  tom3   .....x..........
+grid tease
+  kick   x.......x.......
+  hat    ..x...x...x...x.
+grid teaseF
+  kick   x.......x.......
+  snare  ............xxxx
+grid roll8
+  kick   x...x...x...x...
+  snare  x.x.x.x.x.x.x.x.
+grid roll16
+  kick   x...x...x...x...
+  snare  xxxxxxxxxxxxxxxx
+grid roll32 step=t
+  kick   x.......x.......x.......x.......
+  snare  xxxxxxxxxxxxxxxxxxxxxxxxXXXXXXXX
+grid gap
+  kick   x...............
+grid outroB
+  kick   x.........x.....
+  snare  ........x.......
+
+section intro bars=8
+  bells: mf themeA themeB
+  pad:   mp expr=60->127:8bar hold over drive*2
+  arp:   p cutoff=28->80:8bar arp16 over drive*2
+  sub:   mp subL subL
+  rise:  rw*6 | mf C#4w~ | C#4w |
+  drums: mp tease*7 teaseF
+
+section build bars=4
+  arp:   mf cutoff=60->110:4bar arp16 over drive
+  pad:   mf hold over drive
+  saw:   mp C#5w | D5w | E5w | G#5h rh |
+  rise:  f C#4w~ | C#4w~ | C#4w~ | C#4h rh |
+  drums: f roll8 roll16 roll32 gap
+
+section drop1 bars=8
+  wob:     ff wobA wobA
+  sub:     f subL subL
+  screech: f scrA scrA
+  drums:   ff halfC half*6 halfF
+
+section break bars=8
+  saw:   f themeA themeB
+  pad:   mf hold over drive*2
+  arp:   mf cutoff=70 arp16 over drive*2
+  bells: mp rw*4 | C#6h. rq | D6h. rq | E6h. rq | G#5h. rq |
+  sub:   mf subL subL
+  drums: f tease*3 teaseF half*3 halfF
+
+section build2 bars=4
+  arp:   f cutoff=70->115:4bar arp16 over drive
+  saw:   f C#5w | D5w | E5w | G#5h rh |
+  rise:  f C#4w~ | C#4w~ | C#4w~ | C#4h rh |
+  drums: ff roll16 roll16 roll32 gap
+
+section drop2 bars=8
+  wob:     fff wobB wobB
+  wob2:    ff wobA wobB
+  sub:     f subL subL
+  screech: ff scrB scrB
+  saw:     mf rw*4 | themeA
+  drums:   fff heavyC heavy*6 heavyF
+
+section outro bars=4
+  bells: mf C#6h. rq | D6h. rq | E6h. rq | G#5w |
+  pad:   mp expr=127->30:4bar hold over drive
+  wob:   f wobble=8 F#2w | wobble=4 F#2w | rw*2 |
+  sub:   mf F#1w | F#1w | rw*2 |
+  drums: f outroB | outroB | gap | rw |
+
+arrange intro build drop1 break build2 drop2 outro
+
+variant loop
+  arrange |: build drop1 break build2 drop2 :|

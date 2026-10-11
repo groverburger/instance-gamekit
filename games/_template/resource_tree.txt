@@ -1,0 +1,27 @@
+# Resource tree: one node per line, 2 spaces per level. `Name/` is a group;
+# `{ ... }` spells out a node that has no short form.
+Sprites
+  spr_player
+  spr_coin
+Sounds
+  snd_coin
+Backgrounds
+Paths
+Scripts
+  scr_text
+  scr_save_best
+Fonts
+  fnt_big
+  fnt_small
+Time Lines
+Objects
+  obj_game
+  obj_title
+  obj_player
+  obj_coin
+Rooms
+  rm_title
+  rm_game
+Game Information
+Global Game Settings
+Extension Packages

@@ -1,0 +1,12 @@
+# files the game writes into its folder when played
+/*.sav
+/*.ini
+/*.cfg
+/*.dat
+/*_ghost*.txt
+/*_debug.txt
+game_errors.log
+# builds
+*.gm81
+*.gmk
+/assets-src/target/

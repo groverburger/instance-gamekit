@@ -1,0 +1,14 @@
+index = 1
+name = "spr_coin"
+alpha_tolerance = 0
+bbox_bottom = 15
+bbox_left = 0
+bbox_mode = 0
+bbox_right = 15
+bbox_top = 0
+collision_shape = 1
+frames = 1
+last_changed = 0.0
+origin_x = 8
+origin_y = 8
+separate_collision_masks = false

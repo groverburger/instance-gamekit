@@ -1,0 +1,71 @@
+# Deepcore — the magma depths. The leitmotif turned phrygian (Eb) on brass over
+# a pounding pedal-D bass, distorted guitar, timpani and choir.
+title "Deepcore - Magma"
+tempo 138
+time 4/4
+key D phrygian
+
+track bass    inst="Synth Bass 2" oct=2 vol=100 gate=60 human=6
+track guitar  inst="Distortion Guitar" oct=3 vol=70 pan=-35 gate=70 human=6
+track strings inst="Tremolo Strings" oct=4 vol=78 pan=30 reverb=70 gate=100
+track brass   inst="Brass Section" oct=4 vol=98 pan=-10 reverb=60 human=5
+track choir   inst="Choir Aahs" oct=4 vol=80 reverb=100 gate=100 human=6
+track timp    inst=Timpani oct=3 vol=100 human=6
+track drums   drums=power vol=95 human=8
+
+prog lava  = | Dm | Eb/D | Dm | Eb/D | Bb | Cm | Bb | A |
+prog abyss = | Gm | Eb | Bb | A | Gm | Eb | Cm | A |
+
+pattern themeA = A4e D5e Eb5q F5q Eb5e D5e | Eb5q G5q Bb4h | A4e D5e F5q A5q F5q | G5w |
+pattern themeB = F5e G5e A5q Bb5q A5e G5e | G5q Eb5q C5h | D5e Eb5e F5q D5q Bb4q | E5h C#5h |
+pattern chug   = 0s 0 8 0 0 8 0 0 0 0 8 0 5 0 8 0
+pattern riff   = 1e 1 5 1 8 1 5 1
+pattern boom   = 1q rq 1q rq
+pattern roll   = 1q rq rq 1e 1e
+
+grid rock
+  kick   x.x...x.x.x...x.
+  snare  ....X.......X...
+  hat    x.x.x.x.x.x.x.x.
+grid rockC
+  crash  x...............
+  kick   x.x...x.x.x...x.
+  snare  ....X.......X...
+  hat    ..x.x.x.x.x.x.x.
+grid half
+  kick   x.......x.......
+  snare  ........X.......
+  ride   x...x...x...x...
+grid fill
+  kick   x.......x.......
+  snare  ....x.x.xxxxXXXX
+
+section intro bars=4
+  bass:  mf chug over | Dm | Eb/D | Dm | Eb/D |
+  timp:  mf boom over | Dm | Dm | Dm | Dm |
+  drums: mf half*3 fill
+
+section A bars=8
+  bass:   f chug over lava
+  guitar: mf riff over lava
+  timp:   mf boom over lava
+  brass:  f themeA themeB
+  drums:  f rockC rock*7
+
+section B bars=8
+  bass:    mf 1q. 1e 1q 5,q over abyss
+  strings: mp *w over abyss
+  choir:   mf D5w | G5w | F5w | E5w | D5w | Eb5w | Eb5w | C#5w |
+  timp:    mf roll over abyss
+  drums:   mf half*7 fill
+
+section A2 bars=8
+  bass:    ff chug over lava
+  guitar:  f riff over lava
+  strings: f themeA+12 themeB+12
+  choir:   mf *w over lava
+  brass:   ff themeA themeB
+  timp:    f boom over lava
+  drums:   ff rockC rock*7
+
+arrange intro |: A B A2 :|

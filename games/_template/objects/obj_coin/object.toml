@@ -1,0 +1,12 @@
+index = 3
+name = "obj_coin"
+depth = 0
+events = [
+    "step",
+    "alarm_0",
+]
+last_changed = 0.0
+persistent = false
+solid = false
+sprite = "spr_coin"
+visible = true

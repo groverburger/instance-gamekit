@@ -1,0 +1,11 @@
+index = 1
+name = "fnt_small"
+antialias = 0
+bold = false
+charset = 0
+font_name = "Arial"
+italic = false
+last_changed = 0.0
+range_end = 127
+range_start = 32
+size = 11

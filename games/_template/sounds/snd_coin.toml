@@ -1,0 +1,11 @@
+index = 0
+name = "snd_coin"
+data = "snd_coin.wav"
+effects = 0
+file_name = "snd_coin.wav"
+file_type = ".wav"
+kind = 0
+last_changed = 0.0
+pan = 0.0
+preload = true
+volume = 1.0

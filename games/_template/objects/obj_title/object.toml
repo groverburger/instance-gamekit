@@ -1,0 +1,11 @@
+index = 1
+name = "obj_title"
+depth = 0
+events = [
+    "step",
+    "draw",
+]
+last_changed = 0.0
+persistent = false
+solid = false
+visible = true

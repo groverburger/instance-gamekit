@@ -1,0 +1,58 @@
+# Deepcore — the middle layers. The leitmotif in D minor on a soft flute over
+# warm pads, celesta arpeggios and dripping kalimba; a cello answers in B.
+title "Deepcore - The Deep"
+tempo 80
+time 4/4
+key D minor
+
+track pad     inst="Pad 2 (warm)" oct=3 vol=62 reverb=110 gate=100
+track celesta inst=Celesta oct=5 vol=66 pan=30 reverb=110 human=6
+track bass    inst="Fretless Bass" oct=2 vol=92 human=4
+track flute   inst=Flute oct=5 vol=90 pan=-15 reverb=90 human=4
+track cello   inst=Cello oct=3 vol=86 pan=-25 reverb=90 human=4 gate=100
+track drip    inst=Kalimba oct=4 vol=55 pan=40 reverb=120 human=10
+track drums   drums=brush vol=62 human=8
+
+prog deep  = | Dm | Bb | C | Am | Dm | Bb | Gm | A |
+prog drift = | Bb | F | Gm | Dm | Bb | F | Gm | A7 |
+
+pattern themeA = A4e D5e E5q F5q E5e D5e | D5q F5q Bb4h | C5e D5e E5q G5q E5q | A4w |
+pattern themeB = A4e D5e E5q F5q A5e G5e | F5q D5q Bb4h | Bb4e C5e D5q G5q F5q | E5h. C#5q |
+pattern cellos = D4h F4h | C4h A3h | Bb3h D4h | A3w | D4h F4h | A4h G4h | F4h E4h | E4h C#4h |
+pattern arp    = 1e 5 9 5 10 5 9 5
+pattern drop   = rh. 5'q
+
+grid brush
+  kick   x.......x.......
+  snare  ....o.......o..o
+  hat    x...x...x...x...
+
+section intro bars=4
+  pad:     pp *w over | Dm | Bb | C | Am |
+  celesta: p arp over | Dm | Bb | C | Am |
+  drip:    p drop over | Dm | Bb | C | Am |
+
+section A bars=8
+  pad:     p *w over deep
+  celesta: p arp over deep
+  bass:    mp 1h 5,h over deep
+  flute:   mf themeA themeB
+  drip:    p drop over deep
+
+section B bars=8
+  pad:     mp *w over drift
+  celesta: p arp over drift
+  bass:    mp 1h 5,h over drift
+  cello:   mf cellos
+  drums:   p brush*8
+
+section A2 bars=8
+  pad:     mp *w over deep
+  celesta: mp arp over deep
+  bass:    mf 1h 5,h over deep
+  flute:   mf themeA themeB
+  cello:   mp themeA-12 themeB-12
+  drip:    p drop over deep
+  drums:   mp brush*8
+
+arrange intro |: A B A2 :|

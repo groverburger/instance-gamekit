@@ -1,0 +1,91 @@
+constants = [
+    { name = "ROUND_STEPS", value = "1800" },
+]
+constants_last_changed = 0.0
+extension_packages = []
+format_version = 810
+game_id = 731205
+guid = "696e7374616e63652d74656d706c6174"
+last_instance_id = 100006
+last_tile_id = 10000000
+library_init_code = []
+room_order = [
+    "rm_title",
+    "rm_game",
+]
+triggers_last_changed = 0.0
+
+[game_information]
+allow_resize = true
+background_color = 4278190104
+height = 400
+last_changed = 0.0
+left = -1
+pause_game = true
+show_in_separate_window = false
+show_window_border = true
+stay_on_top = false
+top = -1
+width = 600
+window_caption = "Game Information"
+
+[settings]
+abort_on_all_errors = false
+allow_window_resize = false
+always_on_top = false
+argument_errors = true
+author = ""
+color_depth = 0
+color_outside_room = 0
+company = ""
+copyright = ""
+description = ""
+disable_screensaver = true
+display_cursor = true
+display_errors = true
+dont_draw_border = false
+dont_show_buttons = false
+freeze_on_lose_focus = false
+frequency = 0
+info_last_changed = 0.0
+information = ""
+interpolate_pixels = false
+last_changed = 0.0
+let_esc_end_game = false
+let_f1_game_info = true
+let_f4_fullscreen = true
+let_f5_save_f6_load = false
+let_f9_screenshot = true
+load_image_alpha = 255
+load_image_transparent = false
+loading_bar = 1
+process_priority = 0
+product = ""
+resolution = 0
+scale_progress_bar = true
+scaling = -1
+set_resolution = false
+show_custom_load_image = false
+start_fullscreen = false
+treat_close_as_esc = true
+treat_uninitialized_as_zero = false
+uninitialized_extra_bits = 0
+version_build = 0
+version_major = 1
+version_minor = 0
+version_release = 0
+version_text = "100"
+vsync = 1
+write_errors_to_log = false
+
+[slots]
+backgrounds = 0
+fonts = 2
+objects = 4
+paths = 0
+rooms = 2
+scripts = 2
+sounds = 1
+sprites = 2
+timelines = 0
+triggers = 0

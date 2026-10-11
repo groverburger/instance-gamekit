@@ -1,0 +1,13 @@
+index = 2
+name = "obj_player"
+depth = 0
+events = [
+    "create",
+    "step",
+    "collision_obj_coin",
+]
+last_changed = 0.0
+persistent = false
+solid = false
+sprite = "spr_player"
+visible = true

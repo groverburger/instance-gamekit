@@ -1,0 +1,57 @@
+index = 1
+name = "rm_game"
+background_color = 3155240
+backgrounds = [
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+]
+caption = "Template"
+draw_background_color = true
+height = 540
+instances = [
+    { id = 100003, object = "obj_player", x = 480, y = 270 },
+    { id = 100004, object = "obj_coin", x = 200, y = 150 },
+    { id = 100005, object = "obj_coin", x = 760, y = 180 },
+    { id = 100006, object = "obj_coin", x = 600, y = 420 },
+]
+isometric_grid = false
+last_changed = 0.0
+persistent = false
+snap_x = 16
+snap_y = 16
+speed = 60
+tiles = []
+views = [
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+]
+views_enabled = false
+width = 960
+
+[editor]
+current_tab = 0
+delete_underlying_objects = 0
+delete_underlying_tiles = 0
+editor_height = 0
+editor_width = 0
+h_scroll = 0
+remember_room_editor_info = 0
+show_backgrounds = 0
+show_foregrounds = 0
+show_grid = 0
+show_objects = 0
+show_tiles = 0
+show_views = 0
+v_scroll = 0

@@ -1,0 +1,70 @@
+# Classic orchestral JRPG battle (in the spirit of 80s/90s console RPGs):
+# brass fanfare, a driving 16th-note string ostinato, octave-bouncing bass,
+# timpani, minor-key melody with diminished/dominant colour and a sequence.
+title "Steel and Sorcery"
+tempo 168
+time 4/4
+key C minor
+
+track trumpet inst=Trumpet oct=5 vol=96 pan=8 reverb=50 human=4
+track horns   inst="French Horn" oct=4 vol=84 pan=-30 reverb=60 human=4 gate=100
+track brass   inst="Brass Section" oct=4 vol=88 pan=-12 reverb=50 human=5
+track strings inst="String Ensemble 1" oct=4 vol=80 pan=28 reverb=55 gate=70 human=6
+track violins inst="String Ensemble 2" oct=5 vol=86 pan=18 reverb=60 human=5
+track flute   inst=Flute oct=5 vol=72 pan=35 reverb=60 human=4
+track bass    inst=Contrabass oct=2 vol=100 gate=80 human=4
+track timp    inst=Timpani oct=3 vol=100 human=6
+track drums   drums=orchestra vol=88 human=6
+
+prog fight = | Cm | G7/B | Fm/Ab | Eb | Cm | Bb7 Eb | Ab Fm6 | Cm/G G7 |
+prog surge = | Ab | Bb | Gm | Cm | Fm | Bb7 | Ebmaj7 | Dm7b5 G7 |
+
+pattern melA = G4q. C5e Eb5q D5e C5e | B4q G4q G4h | Ab4q. C5e F5q Eb5e D5e | Eb5h. rq | \
+               G5q. F5e Eb5q D5e C5e | D5q Eb5e F5e G5h | Ab5q G5e F5e Eb5q D5q | C5h B4h |
+pattern melB = C5e Eb5 Ab5 G5 F5q Eb5q | D5e F5 Bb5 Ab5 G5q F5q | G5e Bb5 D6 C6 Bb5q A5q | G5h. rq | \
+               F5e Ab5 C6 Bb5 Ab5q G5q | F5e Ab5 D6 C6 Bb5q Ab5q | G5e Bb5 Eb6 D6 C6q Bb5q | Ab5q F5q D5q B4q |
+pattern osti = 1s 5 8 5 10 8 5 8
+pattern bounce = 1e 8 1 8 1 8 1 8
+pattern stab = rq *e> re rq *e> re
+
+grid march
+  kick   x.......x.......
+  snare  ....x..o....x.oo
+grid marchC
+  crash  x...............
+  kick   x.......x.......
+  snare  ....x..o....x.oo
+
+section intro bars=2
+  brass:   ff [C4 Eb4 G4 C5]q> rq [C4 Eb4 G4 C5]q> rq | [Ab3 C4 F4 Ab4]q> [Ab3 C4 F4 Ab4]q> [G3 B3 D4 G4]h> |
+  strings: ff rh G4s Ab4 B4 C5 D5 Eb5 F5 G5 | [Ab3 C4 F4]q> [Ab3 C4 F4]q> [G3 B3 D4]h> |
+  timp:    ff C3q> rq C3q> rq | F3q> F3q> G2s*8 |
+  drums:   ff [crash kick]q rq [crash kick]q rq | snare:q snare:q snare:s*8 |
+
+section A bars=8
+  trumpet: f melA
+  horns:   mp *h over fight
+  strings: mf osti over fight
+  bass:    f bounce over fight
+  timp:    mf 1q rq 1q rq over fight
+  drums:   mf marchC march*7
+
+section B bars=8
+  violins: f melB
+  flute:   mf melB
+  brass:   f stab over surge
+  strings: mf osti over surge
+  bass:    f bounce over surge
+  timp:    mf 1q rq 1q rq over surge
+  drums:   mf marchC march*7
+
+section A2 bars=8
+  trumpet: ff melA
+  horns:   f melA-12
+  brass:   f stab over fight
+  strings: f osti over fight
+  bass:    ff bounce over fight
+  timp:    f 1q rq 1q 1e 1e over fight
+  drums:   f marchC march*7
+
+arrange intro |: A B A2 B :|

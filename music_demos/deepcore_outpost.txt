@@ -1,0 +1,59 @@
+# Deepcore — the surface outpost. Bright mixolydian groove; the 4-bar leitmotif
+# (A-D-E-F#, falling back) is shared by all three Deepcore themes.
+title "Deepcore - Outpost"
+tempo 112
+time 4/4
+key D mixolydian
+
+track guitar inst="Acoustic Guitar (steel)" oct=3 vol=82 pan=-30 gate=90 human=6
+track keys   inst="Electric Piano 1" oct=4 vol=58 pan=30 reverb=60 human=6
+track bass   inst="Fingered Bass" oct=2 vol=95 human=5
+track lead   inst="Pan Flute" oct=5 vol=100 pan=-5 reverb=70 human=4
+track vibes  inst=Vibraphone oct=4 vol=78 pan=15 reverb=80 human=4
+track drums  drums vol=82 human=8
+
+prog home  = | D | C | G | D | D | C | Em | A |
+prog ridge = | G | A | F#m | Bm | G | A | C | A |
+
+pattern themeA = A4e D5e E5q F#5q E5e D5e | C5q E5q G4h | G4e A4e B4q D5q B4q | A4w |
+pattern themeB = A4e D5e E5q F#5q A5e G5e | G5q E5q C5h | B4e C5e D5q E5q G5q | A5h. E5q |
+pattern ridgeM = B5q. A5e G5q D5q | E5q. F#5e E5h | F#5q. E5e C#5q A4q | D5w | \
+                 B5q. A5e G5q B5q | A5q. G5e E5h | G5q E5q C5q E5q | A5h. rq |
+pattern arp  = 1e 5 8 5 10 5 8 5
+pattern walk = 1q. 5e 8q 5q
+pattern comp = rq *e. *s rq *q
+
+grid groove
+  kick   x.....x...x.....
+  snare  ....x.......x..o
+  hat    x.x.x.x.x.x.x.xo
+  tamb   ....x.......x...
+
+section intro bars=4
+  guitar: mp arp over | D | C | G | D |
+  bass:   rw rw mp 1w over | G | D |
+  drums:  rw rw mp groove*2
+
+section A bars=8
+  guitar: mf arp over home
+  bass:   mf walk over home
+  keys:   mp comp over home
+  lead:   mf themeA themeB
+  drums:  mf groove*8
+
+section B bars=8
+  guitar: mf arp over ridge
+  bass:   mf walk over ridge
+  vibes:  mp *h over ridge
+  lead:   f ridgeM
+  drums:  mf groove*8
+
+section A2 bars=8
+  guitar: mf arp over home
+  bass:   f walk over home
+  keys:   mf comp over home
+  lead:   f themeA themeB
+  vibes:  mf themeA-12 themeB-12
+  drums:  f groove*8
+
+arrange intro |: A B A2 :|

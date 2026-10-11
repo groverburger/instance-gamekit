@@ -1,0 +1,17 @@
+[workspace]
+resolver = "2"
+members = ["crates/instance-music"]
+# games are separate repositories, cloned into games/
+exclude = ["games"]
+
+[workspace.package]
+edition = "2021"
+license = "MIT OR Apache-2.0"
+version = "0.1.0"
+
+# Instance itself (the GameMaker 8.1 runner, IDE, file format and gmk-check) lives in its
+# own repository, expected next to this one as ../gm81-clean. Path dependencies point
+# there; see README.md.
+[workspace.dependencies]
+instance-format = { path = "../gm81-clean/crates/instance-format" }
+instance-runner = { path = "../gm81-clean/crates/instance-runner" }

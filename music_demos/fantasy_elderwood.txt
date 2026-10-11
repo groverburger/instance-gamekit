@@ -1,0 +1,71 @@
+# Fantasy overworld: a Celtic-flavoured jig in 6/8 (dotted quarter = 100).
+# Tin whistle states the tune, the fiddle takes it over, both join at the end.
+title "Elderwood"
+tempo 150
+time 6/8
+key G major
+
+track harp    inst="Orchestral Harp" oct=4 vol=80 pan=-25 reverb=80 human=5
+track whistle inst=Whistle oct=5 vol=88 pan=10 reverb=70 human=4
+track fiddle  inst=Fiddle oct=5 vol=92 pan=20 reverb=60 human=6
+track pad     inst="String Ensemble 2" oct=4 vol=58 reverb=90 gate=100
+track bass    inst="Acoustic Bass" oct=2 vol=90 human=4
+track drums   drums vol=70 human=8
+
+prog glade = | G | C | G | D | Em | C | D | G |
+prog brook = | Em | Bm | C | G | Em | C | Am B7 | Em |
+
+pattern tuneA = G4e B4 D5 G5q D5e | E5e D5 B4 A4q G4e | G4e B4 D5 G5q A5e | B5e A5 G5 A5q. | \
+                B5e A5 G5 E5q D5e | E5e G5 E5 D5q B4e | A4e B4 D5 E5q D5e | G4q. G4q. |
+pattern tuneB = E5e F#5 G5 B5q G5e | F#5e E5 D5 E5q B4e | C5e D5 E5 G5q E5e | D5e B4 A4 B4q. | \
+                E5e F#5 G5 B5q A5e | G5e F#5 E5 F#5q D5e | E5e G5 F#5 E5q D#5e | E5q. E5q. |
+pattern arp  = 1e 5 8 10 8 5
+pattern lope = 1q. 5,q.
+
+grid jig step=e
+  kick   x.....
+  tom5   ...x..
+  shaker XooXoo
+
+section intro bars=4
+  harp: mp arp over | G | C | G | D |
+  pad:  pp *h. over | G | C | G | D |
+
+section A bars=8
+  harp:    mp arp over glade
+  pad:     pp *h. over glade
+  bass:    mp lope over glade
+  whistle: mf tuneA
+  drums:   p jig*8
+
+section A2 bars=8
+  harp:   mf arp over glade
+  pad:    p *h. over glade
+  bass:   mf lope over glade
+  fiddle: mf tuneA
+  drums:  mp jig*8
+
+section B bars=8
+  harp:   mf arp over brook
+  pad:    mp *h. over brook
+  bass:   mf lope over brook
+  fiddle: f tuneB
+  drums:  mp jig*8
+
+section B2 bars=8
+  harp:    mf arp over brook
+  pad:     mp *h. over brook
+  bass:    mf lope over brook
+  whistle: f tuneB
+  fiddle:  mp tuneB-12
+  drums:   mf jig*8
+
+section A3 bars=8
+  harp:    f arp over glade
+  pad:     mf *h. over glade
+  bass:    f lope over glade
+  whistle: f tuneA
+  fiddle:  f tuneA-12
+  drums:   mf jig*8
+
+arrange intro |: A A2 B B2 A3 :|

@@ -1,0 +1,12 @@
+/target
+*.gm81
+*.gmk
+# the General MIDI SoundFont (scripts/fetch-soundfont.*)
+/soundfonts/
+# music experiments: keep the sources, not the renders
+/music_demos/*.wav
+/music_demos/*.mid
+# games are their own git repositories, cloned into games/ (all but the template)
+/games/*
+!/games/_template/
+game_errors.log

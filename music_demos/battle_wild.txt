@@ -1,0 +1,73 @@
+# Handheld-monster-RPG style wild battle: fast, square-wave lead, an urgent
+# rising chromatic intro run with orchestra hits, an octave-pumping synth bass,
+# brass pads and off-beat stabs, chromatic chord shifts (F -> B7).
+title "Wild Encounter"
+tempo 172
+time 4/4
+key E minor
+
+track lead   inst="Lead 1 (square)" oct=5 vol=92 pan=-8 reverb=30 human=4
+track lead2  inst="Lead 2 (sawtooth)" oct=4 vol=62 pan=22 reverb=30
+track brass  inst="Synth Brass 1" oct=4 vol=74 pan=-25 reverb=40 gate=100 human=6
+track stabs  inst="Brass Section" oct=4 vol=78 pan=25 reverb=35 human=8
+track hit    inst="Orchestra Hit" oct=4 vol=88 reverb=40 human=6
+track arp    inst="Lead 1 (square)" oct=4 vol=46 pan=35 gate=60 human=8
+track bass   inst="Synth Bass 1" oct=2 vol=104 gate=70 human=5
+track drums  drums vol=95 human=6
+
+prog run  = | Em | Em | C | D | Em | Em | F | B7 |
+prog soar = | C | D | Bm | Em | Am | D | G | B7 |
+
+pattern melA = B4q. E5e G5q F#5e E5e | F#5q. D5e B4h | C5q. E5e A5q G5e F#5e | G5h F#5h | \
+               B4q. E5e G5q B5e A5e | G5q F#5e E5e D5q E5q | F5q. A5e C6q B5e A5e | B5h. rq |
+pattern melB = E5q G5q C6q B5q | A5h. F#5q | D5q F#5q B5q A5q | G5h E5h | \
+               A4q C5q E5q G5q | F#5q E5q D5q A5q | G5q B5q D6q C6e B5e | B5w |
+pattern pump  = 1e 8 1 8 1 8 1 8
+pattern spark = 1s 5 8 10 8 5 1 5
+pattern offb  = re *e> re *e> re *e> re *e>
+
+grid drive
+  kick   x.......x.x.....
+  snare  ....x.......x...
+  hat    x.x.x.x.x.x.x.x.
+grid driveC
+  crash  x...............
+  kick   x.......x.x.....
+  snare  ....x.......x...
+  hat    ..x.x.x.x.x.x.x.
+grid build
+  kick   x...x...x...x...x...x...x...x...
+  snare  x.x.x.x.x.x.x.x.x.x.x.x.xxxxXXXX
+
+section intro bars=4
+  lead:  ff B4s C5 B4 Bb4 B4 C5 C#5 D5 D#5 E5 F5 F#5 G5 G#5 A5 A#5 | B5e> re B5e> re C6e> re B5q> | rw | rw |
+  hit:   rw | [E4 G4 B4]e> re [E4 G4 B4]e> re [F4 A4 C5]e> re [E4 G4 B4]q> | rw | rw |
+  bass:  rw | E2e> re E2e> re F2e> re E2q> |
+  bass:  f pump over | Em | Em |
+  drums: rw | [crash kick]e re kick:e re kick:e re [crash kick]q | build
+
+section A bars=8
+  lead:  f melA
+  brass: mp *w over run
+  arp:   mp spark over run
+  bass:  f pump over run
+  drums: f driveC drive*7
+
+section B bars=8
+  lead:  f melB
+  lead2: mp melB-12
+  stabs: mf offb over soar
+  brass: mp *w over soar
+  bass:  f pump over soar
+  drums: f driveC drive*7
+
+section A2 bars=8
+  hit:   [E4 G4 B4]e> re rq rh | rw*3 | [E4 G4 B4]e> re rq rh | rw*3 |
+  lead:  ff melA
+  lead2: mf melA-12
+  stabs: mf offb over run
+  arp:   mp spark over run
+  bass:  ff pump over run
+  drums: ff driveC drive*7
+
+arrange intro |: A B A2 B :|

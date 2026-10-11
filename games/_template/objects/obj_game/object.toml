@@ -1,0 +1,12 @@
+index = 0
+name = "obj_game"
+depth = -1000
+events = [
+    "create",
+    "step",
+    "draw",
+]
+last_changed = 0.0
+persistent = true
+solid = false
+visible = true
