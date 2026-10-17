@@ -1,0 +1,33 @@
+# The template's sprites. Edit, then:
+#   gmk-art build games/<name>      writes them into sprites/
+#   gmk-art sheet games/<name> -o sheet.png
+#   gmk-art check games/<name>
+# The format is documented in crates/instance-art/README.md of the gamekit.
+
+ramp abcde #3a78d8          # blue, dark (a) to light (e)
+ramp vwxyz #f0b828          # gold
+color k #101828             # near-black ink
+color W #f4f4f8             # eye white
+
+sprite spr_player 32x32
+origin center
+# a rounded square body
+rect 4 3 24 26 c
+rect 3 4 26 24 c
+# left eye and half the mouth; `mirror x` makes the right half
+rect 9 9 4 6 W
+rect 10 11 2 3 k
+line 13 20 15 20 a
+mirror x
+# light from the top left: a lit rim and a shaded rim keep it readable on dark rooms
+shade tl
+outline k
+
+sprite spr_coin 16x16
+origin center
+circle 8 8 7.4 x
+circle 8 8 5.4 w
+rect 7 4 2 8 y               # the stamped bar
+pixel 7 4 z
+shade tl
+outline v

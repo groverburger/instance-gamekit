@@ -1,6 +1,6 @@
 [workspace]
 resolver = "2"
-members = ["crates/instance-music"]
+members = ["crates/instance-art", "crates/instance-music"]
 # games are separate repositories, cloned into games/
 exclude = ["games"]
 

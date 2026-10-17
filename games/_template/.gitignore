@@ -6,7 +6,8 @@
 /*_ghost*.txt
 /*_debug.txt
 game_errors.log
-# builds
+# builds and contact sheets
+/sheet*.png
 *.gm81
 *.gmk
 /assets-src/target/

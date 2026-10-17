@@ -12,8 +12,14 @@ sounds you cannot hear.
 
 ```sh
 cargo build --release -p instance-music          # target/release/gmk-music(.exe), gmk-sounds(.exe)
-export INSTANCE_SOUNDFONT=/path/to/GeneralUser-GS.sf2   # needed for WAV output and MIDI analysis
+export INSTANCE_SOUNDFONT=/path/to/default.sf2   # needed for WAV output and MIDI analysis
 ```
+
+`scripts/fetch-soundfont.sh` (or `.ps1`) in the gamekit root downloads two SoundFonts into
+`soundfonts/`. `default.sf2` is the Arachno SoundFont. Its author can't recommend commercial
+use, because it contains samples by other authors, some of them unknown. For music in a
+game you sell, render with `--soundfont soundfonts/GeneralUser-GS.sf2` (GeneralUser GS,
+free for commercial use too).
 
 Examples: [`examples/explore.txt`](examples/explore.txt) (calm loop, 87 s, two
 variants), [`examples/underground.txt`](examples/underground.txt) (tense loop,

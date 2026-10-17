@@ -18,8 +18,14 @@ change it from here.
   player's real save files.
 - Check visual changes by viewing screenshots (`--screenshot-at`), not just by
   reading code.
-- Procedural assets go through a small tool that writes into the folder (example:
-  Deepcore's `assets-src/`). Music sources live in
-  `games/<name>/music-src/` and render with `gmk-music` into `sounds/`.
+- Art sources live in `games/<name>/art-src/*.art` (format: `crates/instance-art/README.md`)
+  and build with `gmk-art build games/<name>` (build before `gmk-check` when code uses
+  new art: until then the sprite is unknown). After art changes, view
+  `gmk-art sheet games/<name> -o <scratch>/sheet.png` and run `gmk-art check games/<name>`.
+  Don't write sheets into the game folder.
+- Music and sound effects are `gmk-music` text in `games/<name>/music-src/`, rendered
+  into `sounds/` (sound effects: short `synth=` one-shots, `docs/GUIDE.md` §9.2).
+  Only what the text tools can't express goes through a small code tool that writes
+  into the folder (example: Deepcore's `assets-src/`).
 - Tools: `instance-runner`, `instance-ide`, `gmk-check`, `gmk-pack`, `gmk-unpack` come
-  from `../gm81-clean/target/release`. `gmk-music` and `gmk-sounds` are built here.
+  from `../gm81-clean/target/release`. `gmk-art`, `gmk-music` and `gmk-sounds` are built here.

@@ -1,0 +1,5 @@
+title "coin pickup"
+tempo 240
+time 1/4                      # one-beat bars, so the short sound is whole bars
+track coin synth=square oct=5 vol=100 attack=0 decay=40 sustain=30 release=20
+coin: f B5s E6e.

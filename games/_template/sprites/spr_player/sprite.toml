@@ -1,11 +1,11 @@
 index = 0
 name = "spr_player"
 alpha_tolerance = 0
-bbox_bottom = 31
-bbox_left = 0
+bbox_bottom = 29
+bbox_left = 2
 bbox_mode = 0
-bbox_right = 31
-bbox_top = 0
+bbox_right = 29
+bbox_top = 2
 collision_shape = 1
 frames = 1
 last_changed = 0.0

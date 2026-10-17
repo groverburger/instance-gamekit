@@ -10,3 +10,9 @@
 /games/*
 !/games/_template/
 game_errors.log
+# gmk-art contact sheets written to the current directory
+/sheet*.png
+# save and config files written by games run from the repository root
+/*.sav
+/*.cfg
+/*.ini

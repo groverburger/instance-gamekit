@@ -1172,6 +1172,29 @@ dependencies = [
 ]
 
 [[package]]
+name = "instance-art"
+version = "0.1.0"
+dependencies = [
+ "instance-format",
+ "png",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "instance-audio"
+version = "0.1.0"
+dependencies = [
+ "instance-brand",
+ "midly",
+ "rodio",
+ "rustysynth",
+ "web-sys",
+ "web-time",
+ "windows",
+]
+
+[[package]]
 name = "instance-brand"
 version = "0.1.0"
 dependencies = [
@@ -1228,6 +1251,7 @@ dependencies = [
  "glow",
  "glutin",
  "gml",
+ "instance-audio",
  "instance-brand",
  "instance-dllcall",
  "instance-format",
@@ -1235,12 +1259,9 @@ dependencies = [
  "instance-ui",
  "js-sys",
  "libloading",
- "midly",
  "png",
  "raw-window-handle",
  "rfd",
- "rodio",
- "rustysynth",
  "softbuffer",
  "ttf-parser",
  "wasm-bindgen",

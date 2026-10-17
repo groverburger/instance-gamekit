@@ -22,10 +22,11 @@ GameMaker 8.1.
 5. [The GameMaker 8.1 model in brief](#5-the-gamemaker-81-model-in-brief)
 6. [Writing GML](#6-writing-gml)
 7. [Runtime rules](#7-runtime-rules)
-8. [Sound and music](#8-sound-and-music)
-9. [Game design](#9-game-design)
-10. [Testing](#10-testing)
-11. [Where to look next](#11-where-to-look-next)
+8. [Art](#8-art)
+9. [Sound and music](#9-sound-and-music)
+10. [Game design](#10-game-design)
+11. [Testing](#11-testing)
+12. [Where to look next](#12-where-to-look-next)
 
 ---
 
@@ -36,17 +37,17 @@ There are two repositories, side by side:
 | Repository | Contents | Tools built there |
 |---|---|---|
 | Instance (`../gm81-clean`) | the GameMaker 8.1 reimplementation | `instance-runner`, `instance-ide`, `gmk-check`, `gmk-pack`, `gmk-unpack`, `gmk-info` |
-| gamekit (this one) | example games, the music tools, this guide | `gmk-music`, `gmk-sounds`, per-game asset generators |
+| gamekit (this one) | the template, the art and music tools, this guide | `gmk-art`, `gmk-music`, `gmk-sounds` |
 
 Build both:
 
 ```sh
 (cd ../gm81-clean && cargo build --release)   # Instance tools -> ../gm81-clean/target/release
-cargo build --release                         # gmk-music, gmk-sounds -> target/release
+cargo build --release                         # gmk-art, gmk-music, gmk-sounds -> target/release
 ```
 
 The gamekit's `Cargo.toml` expects the Instance checkout at `../gm81-clean`, because
-asset generators use its `instance-format` crate. Then put both `target/release`
+the tools use its `instance-format` crate. Then put both `target/release`
 directories on `PATH`:
 
 ```sh
@@ -59,11 +60,17 @@ $env:PATH = "$PWD\..\gm81-clean\target\release;$PWD\target\release;" + $env:PATH
 Alternatively, call the tools by path. Every command in this guide uses the bare tool
 name and runs from the gamekit root.
 
-**SoundFont.** MIDI and General MIDI instruments need a SoundFont. To download one
-into `soundfonts/default.sf2`, run `scripts/fetch-soundfont.sh` (or `.ps1`) once.
-`gmk-music` finds it there when run from the gamekit root. For the runner and for
-`--audio-out`, set `INSTANCE_SOUNDFONT` to its absolute path. Tracks that use only the
-built-in synthesiser (`synth=`) need no SoundFont.
+**SoundFont.** MIDI and General MIDI instruments need a SoundFont. Run
+`scripts/fetch-soundfont.sh` (or `.ps1`) once to download two into `soundfonts/`:
+
+* `default.sf2` is the Arachno SoundFont, the default. Its author can't recommend
+  commercial use, because it contains samples by other authors, some of them unknown.
+* `GeneralUser-GS.sf2` is free for commercial use too. Render music for a game you sell
+  with `--soundfont soundfonts/GeneralUser-GS.sf2`.
+
+`gmk-music` finds `default.sf2` there when run from the gamekit root. For the runner and
+for `--audio-out`, set `INSTANCE_SOUNDFONT` to the SoundFont's absolute path. Tracks that
+use only the built-in synthesiser (`synth=`) need no SoundFont.
 
 ---
 
@@ -76,8 +83,9 @@ edit these files directly. Every tool reads the folder.
 ```sh
 # edit files in games/mygame/ ...
 gmk-check games/mygame                      # static check: compile errors, bad references, ...
+gmk-art build games/mygame                  # art-src/*.art -> sprites and backgrounds (§8)
 instance-runner games/mygame                # play it (windowed)
-instance-runner games/mygame --headless ... # automated test (§10)
+instance-runner games/mygame --headless ... # automated test (§11)
 gmk-pack games/mygame mygame.gm81           # only to ship a single file
 ```
 
@@ -97,17 +105,22 @@ gmk-pack games/mygame mygame.gm81           # only to ship a single file
 * **Ship**: `gmk-pack games/mygame mygame.gm81` gives one file that Instance (and
   GameMaker 8.1) opens. The folder stays the source of truth. Don't edit the packed
   file.
-* **Generated assets**: art or sound effects made by code come from a small tool that
-  writes into the folder. It does not generate the whole project. For example,
-  Deepcore's `assets-src/` (crate `deepcore-assets`) draws its sprites and synthesises
-  its effects. `cargo run --release --manifest-path games/deepcore/assets-src/Cargo.toml`
-  reads `games/deepcore`, replaces the generated sprites, backgrounds and sounds by
-  name, and writes back only the files that changed. Code, rooms and objects are never
+* **Art** sources live in `games/<name>/art-src/*.art`, sprites and backgrounds as
+  text (pixel grids, shapes, ramps, frames). `gmk-art build` renders them into the
+  folder; `gmk-art sheet` and `gmk-art check` show and measure the result (§8).
+* **Sound effects** are short `gmk-music` sources too: one-shots that use the built-in
+  synthesiser, rendered into `sounds/` (§9.2).
+* **Other generated assets**: anything the text tools cannot express comes from a small
+  tool that writes into the folder. It does not generate the whole project. For
+  example, Deepcore's `assets-src/` (crate `deepcore-assets`, older than §9.2)
+  synthesises its sound effects in Rust. `cargo run --release --manifest-path games/deepcore/assets-src/Cargo.toml`
+  reads `games/deepcore`, replaces the generated sounds by name, and writes back only
+  the files that changed. Code, rooms and objects are never
   touched. The resources must already exist in the folder. A generator is a
   stand-alone crate inside the game's own repository (its `Cargo.toml` has an empty
   `[workspace]` table).
 * **Music** sources live in `games/<name>/music-src/*.txt`. `gmk-music` renders them
-  straight into `games/<name>/sounds/` (§8).
+  straight into `games/<name>/sounds/` (§9).
 
 Do not build games by writing Rust (or other) programs that emit a whole project. The
 folder is easier to read, diff, check and fix, and it is what the IDE and the tools
@@ -239,7 +252,7 @@ Read these first. Each one has caused real bugs.
 | 10 | Truthiness: a real is true iff **≥ 0.5**. A string used as a condition is a runtime error. | `if (0.4)` is false. §6.3 |
 | 11 | `string(x)` prints non-integers with exactly 2 decimals. | `string(0.125)` = `"0.13"`. Use `string_format`. §6.7 |
 | 12 | `room_goto()` lets the current code piece finish, then **skips the rest of the event and the step**. | Put it last. §7.3 |
-| 13 | Room creation code runs **after** every Create event. Instance creation code runs **before** that instance's Create. | Read room settings in Room Start. Never overwrite instance-creation variables in Create. §7.3, §9.2 |
+| 13 | Room creation code runs **after** every Create event. Instance creation code runs **before** that instance's Create. | Read room settings in Room Start. Never overwrite instance-creation variables in Create. §7.3, §10.2 |
 | 14 | Step, Begin Step and End Step run **object by object, in object index order**, not in instance creation order. | A controller that must run first needs the lowest object index. §7.1 |
 | 15 | Alarms only count down if the object has (or inherits) that Alarm event. `alarm[i] = 0` never fires. | §7.2 |
 | 16 | Collisions do nothing unless one of the objects has a collision event. With a handler, a **solid** partner puts both back to their previous positions. | §7.4 |
@@ -247,6 +260,7 @@ Read these first. Each one has caused real bugs.
 | 18 | There is **no Draw GUI event**. | Draw the HUD in Draw at `view_xview[view_current] + dx`. §7.6 |
 | 19 | Draw state (colour, alpha, font, alignment) is global and persists. | Set it before every drawing block. §7.6 |
 | 20 | Arrays are not values. | `b = a` copies `a[0]`. Scripts cannot take or return arrays. §6.4 |
+| 21 | With **"Esc ends the game" off, also turn "treat the close button as Esc" off** (`let_esc_end_game` / `treat_close_as_esc` in `[settings]`). | Otherwise the window's close button only presses Esc (often "pause") and the window cannot be closed. With it off, the close button ends the game, or runs the Close Button event (`other_close_button`) if an object has one, which must then call `game_end()`. The template does this. §7.3 |
 
 ---
 
@@ -604,14 +618,139 @@ over about one second (Deepcore's `obj_music` does this).
 
 ---
 
-## 8. Sound and music
+## 8. Art
+
+`crates/instance-art` provides `gmk-art`: sprites and backgrounds written as text, a
+contact sheet to look at them, and checks that measure what is hard to judge by eye.
+The format reference is [`crates/instance-art/README.md`](../crates/instance-art/README.md).
+The template's `art-src/sprites.art` is a short example.
+
+### 8.1 `.art` files and `gmk-art build`
+
+```text
+# games/mygame/art-src/hero.art
+ramp abcde #3a78d8          # five blues, dark to light, hue-shifted like painted shading
+color k #101828
+
+sprite spr_hero 16x16
+origin center
+rect 3 2 10 12 c
+grid 0 5                    # pixel rows: the left eye
+|.....k
+mirror x                    # the right half
+shade tl                    # light from the top left
+outline k                   # once, at the end
+```
+
+* Small sprites (icons, characters, items): **pixel grids**, with `mirror` for
+  symmetric shapes. Larger ones: **shapes** (`rect`, `circle`, `poly`, `line`), then
+  `noise`, `speckle`, `gradient` for texture, then `shade` and `outline`.
+* Colours come from **ramps** (`ramp 12345 #c82832`). Shading with neighbouring ramp
+  keys, or `k+1` / `k-1`, keeps a sprite's colours related. Keep one light direction
+  for the whole game.
+* Animation: `frame`, `frame from N` (copy a frame and change it) and `finish` (shade
+  and outline every frame the same way).
+* Backgrounds: `background NAME WxH`; `tiles W H` for tilesets; `wrap` for textures
+  that tile (drawing and `noise` wrap around the edges, so there is no seam).
+* Patterns and procedural textures: `stripes`, `ridge` (hills), `scatter` (ore, trees,
+  stars), `bevel`, and `field`, which paints a box from a formula such as
+  `"sin(x*tau/128*2)"` mapped onto colour stops; `f` is the frame number, so a
+  `field` can animate. Use `lock` (paint only inside what is drawn), `clip` and
+  `mode multiply|add|screen` to shade and texture inside shapes.
+* Deepcore's `art-src/` is a complete example: every sprite, the tileset, animated
+  seamless water and lava, and a 960x540 title painting. It is in the Deepcore
+  repository; clone it into `games/deepcore` to read it.
+* `gmk-art build games/mygame` writes every resource into the folder: frames,
+  origin, mask and bbox. New sprites and backgrounds are added, existing ones replaced
+  by name. Re-run it after every edit. `gmk-art check` reports `.art` files that were
+  changed but not built.
+* **Order**: you may write objects and rooms that use `spr_ship` before it exists.
+  `gmk-check` and the runner then fail with "unknown sprite" until you run
+  `gmk-art build`, which creates it. So after adding art, build first, then check.
+* `build` reads and writes the whole folder the way the IDE saves it: besides the art,
+  it may fill in metadata the folder lacks (a `.toml` for a script that has none, slot
+  counts in `project.toml`). That changes nothing in the game.
+* Two traps, both in the format reference:
+  - **`lock` first.** `lock` keeps painting inside what is already drawn. It must come
+    *before* the texture (`circle ...`, `lock`, `noise ...`), and it only confines to
+    a shape on an empty canvas. To shade one shape over a filled background, draw it
+    as a `piece` and `stamp` it.
+  - **Clear stops replace.** A colour with alpha (`#fff@0`, `clear`) *replaces* pixels
+    in the default `mode normal`, punching holes. To lay translucent colour over what
+    is there (clouds, stars, haze), set `mode over` first.
+
+### 8.2 Looking: `gmk-art sheet`
+
+```sh
+gmk-art sheet games/mygame -o "$T/sheet.png"                    # everything
+gmk-art sheet games/mygame --only spr_hero,spr_bat -o "$T/s.png" # bigger, with motion
+gmk-art sheet games/mygame/art-src/hero.art -o "$T/hero.png"    # one file, no build
+```
+
+Then **view the PNG**. Each card shows the sprite zoomed in against the room it is
+used in (background colour, layers and tiles as the player sees them), on light and on
+dark, as a silhouette with its collision box and origin, and at 1x and 2x. Judge it at
+1x: that is what the player sees. A sprite that only reads when zoomed is too
+detailed. With `--only` (up to three names) or `--detail`, the card also compares each
+frame with the previous one:
+- red: pixels that disappeared;
+- green: pixels that appeared;
+- yellow: pixels that changed colour.
+
+Use it to check an animation without watching it, including the loop from the last
+frame to the first.
+
+Sheets can run to several pages (`sheet.png`, `sheet-2.png`, ...). Write them to a
+scratch directory, not into the game folder.
+
+### 8.3 Measuring: `gmk-art check`
+
+```sh
+gmk-art check games/mygame               # warnings and notes; exit code 1 on warnings
+gmk-art check games/mygame --verbose     # plus a table: colours, outline, edge contrast, scene
+```
+
+Act on the warnings:
+
+* `contrast`: the sprite's edge blends into the backdrop. Add an outline, or a lit or
+  shaded rim (`shade`). The template's first player sprite had a navy outline on a
+  near-black room; this check caught it.
+* `flip-origin` / `rotate-origin`: an object flips or rotates the sprite around an
+  origin that is off-centre, so the sprite jumps.
+* `seam`: a tiled background shows its edges.
+* `not-built`: run `gmk-art build`.
+
+The notes cover style:
+- outlines 2 px thick (usually from outlining twice);
+- sprites without the outline the rest of the game uses;
+- sprites drawn at a different pixel size;
+- stray pixels, anti-aliased fringes, and near-identical colours.
+
+The backdrop is guessed from the rooms where the sprite's objects are placed. When the
+guess is wrong (a cave creature judged against the sky), give it `against bg_rock` in
+its `.art` file, or pass `--bg`.
+
+### 8.4 Targets
+
+* Readable at 1x against its real backdrop: median edge contrast 2:1 or more.
+* One light direction, one outline style and one pixel size across the game.
+* Few colours per sprite, taken from ramps. Similar things share ramps; important things
+  (the player, pickups, danger) get colours nobody else uses.
+* Origins at the centre (top-down) or bottom centre (platformers), so flipping and
+  rotating stay in place.
+* Animation: every frame changes something (look at the motion panels), and the last
+  frame leads back into the first.
+
+---
+
+## 9. Sound and music
 
 The gamekit's `crates/instance-music` provides two tools for making and checking sound
 without listening to it. The notation reference is
 [`crates/instance-music/README.md`](../crates/instance-music/README.md), with example
 songs in `crates/instance-music/examples/` and `music_demos/`.
 
-### 8.1 `gmk-music`: music as text
+### 9.1 `gmk-music`: music as text
 
 ```sh
 gmk-music render games/mygame/music-src/mus_title.txt -o games/mygame/sounds/mus_title.wav --loop --rate 32000 --mono
@@ -639,7 +778,37 @@ gmk-music instruments | drums | synths           # lists
   the exact render commands (as Deepcore's `music-src/README.txt` does), and render
   straight into `sounds/`. The first time, create the sound's TOML too (§3.3).
 
-### 8.2 `gmk-sounds`: measuring sounds
+### 9.2 Sound effects as text
+
+Sound effects are tiny songs: one or two `synth=` tracks (no SoundFont needed), a few
+notes, a pitch glide or a drum hit, rendered without a loop and with a short tail for
+the reverb to ring out. Keep them in `music-src/` next to the music:
+
+```text
+# music-src/snd_star.txt: a bright two-note chime for picking up a star
+title "star pickup"
+tempo 150
+time 1/4                      # a one-beat bar, so a short sound is whole bars
+track chime synth=fmpluck oct=6 vol=110 reverb=30
+track glow  synth=bell oct=6 vol=80 reverb=40
+chime: f E5s B5s> E6e^
+glow:  mp rs rs [E6 B6]e
+```
+
+```sh
+gmk-music render games/mygame/music-src/snd_star.txt -o games/mygame/sounds/snd_star.wav --rate 32000 --mono --tail 0.5
+gmk-sounds games/mygame/sounds/snd_*.wav     # levels, and which effects sound alike
+```
+
+* Give each action its own character, such as a rising chime for a reward, a low
+  falling glide (`glide=`) with drums for a crash, and a short click for UI. Then check
+  that the `gmk-sounds` similarity table finds none alike.
+* `time 1/4` (or `time 2/4`) keeps short sounds a whole number of bars; otherwise
+  `gmk-music info` warns that the part is not a whole number of bars.
+* Render at 22050 or 32000 Hz mono: effects are short, so the files stay small.
+* Write the render commands into `music-src/README.txt`, as for music.
+
+### 9.3 `gmk-sounds`: measuring sounds
 
 ```sh
 gmk-pack games/mygame "$T/mygame.gm81" && gmk-sounds "$T/mygame.gm81"   # whole game
@@ -658,21 +827,33 @@ similarity table flags sound effects that sound alike. Other flags are `--thresh
 (default 0.85), `--json`, `--no-similarity` and `--window SECS`. Act on its `check`
 lines, its `loop` lines and its **THESE SOUND ALIKE** lines.
 
-### 8.3 Targets
+### 9.4 Targets
 
 * Music: 60–120 s loops with bass, harmony, a melody built on a motif, drums, and
   dynamics that change from section to section. Match the genre to the theme. Give each
   area its own track (or variant) and crossfade over about 1 s.
-* No clipping. Music RMS should sit below the effects' RMS.
+* No clipping. Set levels by measuring, not by rendering everything as loud as
+  possible: `gmk-music render` peak-normalises to -1 dBFS by default, which suits music
+  but makes effects blast.
+  - Music: about -18 to -20 dBFS RMS as it plays in the game (rendered at the default
+    peak, then `sound_volume` 0.7–0.9).
+  - Effects: render with `--normalize -4` to `-8`. A frequent effect (pickup, shot)
+    should sit level with the music (its RMS within ~2 dB of the music's); a rare,
+    big one (explosion, game over) at most ~4–6 dB above it.
+  - Keep frequent effects out of the 3–6 kHz range where the ear is most sensitive:
+    `gmk-sounds` reports the pitch and centroid (a "hissy tone ~5000 Hz" pickup
+    sounds much louder than its level suggests).
+  - Check the real mix: record a play session with `--audio-out mix.wav`, then
+    `gmk-sounds mix.wav --per-second --window 0.25` shows each moment's level.
 * Effects for different actions must not sound alike. Players notice: Deepcore's drill
   and thruster loops scored 0.91 and a player reported them as too similar.
-* Headless runs can record the whole mix with `--audio-out` (§10.5).
+* Headless runs can record the whole mix with `--audio-out` (§11.6).
 
 ---
 
-## 9. Game design
+## 10. Game design
 
-### 9.1 Structure
+### 10.1 Structure
 
 * One **controller object** (`obj_game`) owns the globals, score, level flow, HUD and
   music. Give it a low object index, initialise **every** global (and every element of
@@ -686,7 +867,7 @@ lines, its `loop` lines and its **THESE SOUND ALIKE** lines.
 * User events (`event_user(0)`) are cheap named callbacks inside an object.
 * Prefix every name and avoid built-in names (§6.5).
 
-### 9.2 Rooms and views
+### 10.2 Rooms and views
 
 * Use one room per level (or one big generated room) plus a title room. Room creation
   code is a good place for per-level parameters (`global.level = 3;`). It runs *after*
@@ -701,11 +882,11 @@ lines, its `loop` lines and its **THESE SOUND ALIKE** lines.
 * For scrolling games, enable view 0, set its size and port, and either follow the
   player or move the view in code. Draw the HUD relative to the view (§7.6).
 
-### 9.3 Sprites and collisions
+### 10.3 Sprites and collisions
 
 * Put the **origin** where the object "stands": the centre for top-down games, the
   bottom centre for platformers. It is the pivot for rotation and scaling, and the x/y
-  point.
+  point. `gmk-art check` warns when a flipped or rotated sprite's origin is off-centre.
 * Prefer **rectangle masks** for walls and players. They are fast and predictable. Use
   a dedicated mask sprite (`mask_sprite` in `object.toml`) so animation frames don't
   change the hitbox.
@@ -713,12 +894,12 @@ lines, its `loop` lines and its **THESE SOUND ALIKE** lines.
   moving, or use solid walls with `move_contact_solid(direction, speed)` in the
   collision event and then set the speed to zero.
 
-### 9.4 Timing
+### 10.4 Timing
 
 Use alarms for delays and repeats (`alarm[0] = room_speed * 2`), time lines for
 scripted sequences, and `current_time` (in ms) only for real-time measurements.
 
-### 9.5 Performance
+### 10.5 Performance
 
 GML is interpreted. Keep per-step work modest:
 
@@ -732,25 +913,25 @@ GML is interpreted. Keep per-step work modest:
 * `INSTANCE_PROFILE=1 instance-runner …` prints per-event and per-function timings of
   your game.
 
-### 9.6 Saving and files
+### 10.6 Saving and files
 
 * A folder game's working directory is **the game folder itself**, so the game writes
   its save files (`*.sav`, `*.ini`, `*.txt`, the error log) into `games/<name>/` when
   played. These are gitignored. Never commit them, and never let tests write there
-  (§10.4).
+  (§11.4).
 * Save small state yourself with `ini_open`/`ini_write_real`/`ini_close` or
   `file_text_*`. `game_save`/`game_load` save the whole game state (not data structures
   or resources changed at run time). Turn off `let_f5_save_f6_load` in real games.
 * Check `file_exists` before reading. `highscore_add` and `highscore_show` are built in.
 
-### 9.7 Robustness
+### 10.7 Robustness
 
 * Keep `display_errors` on. Turning on `treat_uninitialized_as_zero` hides bugs, so
   initialise variables instead.
 * Guard references: `if (instance_exists(obj_player)) { … }` before `obj_player.x`.
   Remember there is no short-circuit evaluation.
 
-### 9.8 Design lessons
+### 10.8 Design lessons
 
 These come from many play-test rounds with the user on Deepcore. Check new features
 against them before showing them.
@@ -776,13 +957,13 @@ against them before showing them.
 
 Working with play-test notes: implement concrete notes directly. For open design
 problems, propose a recommended direction first. Verify each change visually with
-headless screenshots of a crafted scene (§10).
+headless screenshots of a crafted scene (§11).
 
 ---
 
-## 10. Testing
+## 11. Testing
 
-### 10.1 Static check: `gmk-check`
+### 11.1 Static check: `gmk-check`
 
 Run `gmk-check games/<name>` after every edit. It takes a folder or a `.gm81`/`.gmk`
 file. It compiles every code piece (scripts, events, room and instance creation code,
@@ -803,10 +984,10 @@ the Create chain), `--strict` (warnings fail too), `--json`, `--quiet` (summary 
 Exit codes: 0 no errors, 1 errors (or warnings with `--strict`), 2 cannot load. It does
 not find runtime errors such as wrong types or missing instances, so run the game too.
 
-### 10.2 Headless runs
+### 11.2 Headless runs
 
 **Always** pass `--save-dir` with a fresh scratch directory and `--no-read-fallback` in
-tests (§10.4 explains why). In the examples, `T` is a scratch directory outside the
+tests (§11.4 explains why). In the examples, `T` is a scratch directory outside the
 game folder, for example `T=$(mktemp -d)`.
 
 ```sh
@@ -839,7 +1020,12 @@ object, position, sprite, depth, …) after the run.
 On Windows the runner is a GUI program, and a shell may not capture its output. Use
 `--log FILE` (or `2>&1 | cat`, or `Start-Process -Wait`).
 
-### 10.3 Input
+In Git Bash on Windows, a path that is part of a larger argument, such as
+`--exec-file 100:/c/tmp/x.gml`, is not converted to a Windows path, and the runner
+reports "path not found". (Paths given as separate arguments are converted.) Write it
+as `100:C:/tmp/x.gml`, or as `100:$(cygpath -m /c/tmp/x.gml)`.
+
+### 11.3 Input
 
 * `--input` takes comma-separated items keyed by step number. It can be repeated, and the
   scripts are combined:
@@ -862,7 +1048,7 @@ On Windows the runner is a GUI program, and a shell may not capture its output. 
   monkey will end the run early. `--random-no-mouse` drops mouse events. This is good
   for checking that nothing crashes.
 
-### 10.4 Saves and files: `--save-dir` and `--no-read-fallback`
+### 11.4 Saves and files: `--save-dir` and `--no-read-fallback`
 
 A folder game's `working_directory` is **the game folder itself** (`games/<name>/`).
 Every file the game writes with a relative name (`ini_open('settings.ini')`,
@@ -878,9 +1064,9 @@ files are the player's real saves and are gitignored.
   what is in DIR exists.
 * Use a fresh DIR per test for reproducible runs.
 * To test late content quickly, write a save or progress file into DIR before the run
-  (e.g. "all levels unlocked"). Alternatively, jump directly with `--exec` (§10.5).
+  (e.g. "all levels unlocked"). Alternatively, jump directly with `--exec` (§11.5).
 
-### 10.5 Injecting code and watching values
+### 11.5 Injecting code and watching values
 
 * `--exec STEP:CODE` (repeatable) and `--exec-file STEP:FILE.gml` run GML at the start
   of step STEP, before that step's events and input. STEP 0 means after the first room's
@@ -911,7 +1097,7 @@ files are the player's real saves and are gitignored.
 * Self-test pattern: let the game print its own assertions with
   `show_debug_message('ok: …')` and grep the log.
 
-### 10.6 Screenshots, speed, audio
+### 11.6 Screenshots, speed, audio
 
 * **Look at the screenshots.** They are PNGs you can view. Verify every visual change
   this way (layout, HUD, effects, colours at different depths and areas), together with
@@ -936,15 +1122,17 @@ files are the player's real saves and are gitignored.
 
 ---
 
-## 11. Where to look next
+## 12. Where to look next
 
 | Topic | Location |
 |---|---|
 | Project folder format in full | `docs/project-folder.md` in the Instance repository |
 | GML language, runtime, built-in functions (`builtins.json`), sound, file formats | `specs/` in the Instance repository (`gml-language.md`, `runtime.md`, `builtins.json`, `sound.md`, …) |
+| `.art` format, `gmk-art build`, `sheet`, `check` | [`crates/instance-art/README.md`](../crates/instance-art/README.md) |
 | Music notation, `gmk-music`, `gmk-sounds` | [`crates/instance-music/README.md`](../crates/instance-music/README.md) |
 | Example games | separate repositories cloned into `games/`: `deepcore`, `hoverdrome`, `lantern`, `neon_swarm`, `skyhook` |
 | New game starter | [`games/_template/`](../games/_template/) |
-| Procedural asset generator example | Deepcore's `assets-src/` |
+| Art sources examples | the template's `art-src/sprites.art`; Deepcore's `art-src/` (a whole game, in the Deepcore repository) |
+| Sound effects as text | §9.2; the template's `music-src/` |
 | Music sources and render commands example | Deepcore's `music-src/` |
 | Example songs | `crates/instance-music/examples/`, `music_demos/` |
