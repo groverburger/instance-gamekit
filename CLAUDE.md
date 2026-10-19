@@ -1,7 +1,7 @@
 # Notes for agents
 
 This repository is for **making games** that run on Instance (a GameMaker 8.1
-reimplementation). Instance itself is a separate repository at `../gm81-clean`; do not
+reimplementation). Instance itself is a separate repository at `../instance`; do not
 change it from here.
 
 - Read `docs/GUIDE.md` before writing GML: GM 8.1 has traps (no short-circuit
@@ -28,4 +28,4 @@ change it from here.
   Only what the text tools can't express goes through a small code tool that writes
   into the folder (example: Deepcore's `assets-src/`).
 - Tools: `instance-runner`, `instance-ide`, `gmk-check`, `gmk-pack`, `gmk-unpack` come
-  from `../gm81-clean/target/release`. `gmk-art`, `gmk-music` and `gmk-sounds` are built here.
+  from `../instance/target/release`. `gmk-art`, `gmk-music` and `gmk-sounds` are built here.

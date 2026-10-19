@@ -36,25 +36,25 @@ There are two repositories, side by side:
 
 | Repository | Contents | Tools built there |
 |---|---|---|
-| Instance (`../gm81-clean`) | the GameMaker 8.1 reimplementation | `instance-runner`, `instance-ide`, `gmk-check`, `gmk-pack`, `gmk-unpack`, `gmk-info` |
+| Instance (`../instance`) | the GameMaker 8.1 reimplementation | `instance-runner`, `instance-ide`, `gmk-check`, `gmk-pack`, `gmk-unpack`, `gmk-info` |
 | gamekit (this one) | the template, the art and music tools, this guide | `gmk-art`, `gmk-music`, `gmk-sounds` |
 
 Build both:
 
 ```sh
-(cd ../gm81-clean && cargo build --release)   # Instance tools -> ../gm81-clean/target/release
-cargo build --release                         # gmk-art, gmk-music, gmk-sounds -> target/release
+(cd ../instance && cargo build --release)   # Instance tools -> ../instance/target/release
+cargo build --release                       # gmk-art, gmk-music, gmk-sounds -> target/release
 ```
 
-The gamekit's `Cargo.toml` expects the Instance checkout at `../gm81-clean`, because
+The gamekit's `Cargo.toml` expects the Instance checkout at `../instance`, because
 the tools use its `instance-format` crate. Then put both `target/release`
 directories on `PATH`:
 
 ```sh
-export PATH="$PWD/../gm81-clean/target/release:$PWD/target/release:$PATH"      # bash
+export PATH="$PWD/../instance/target/release:$PWD/target/release:$PATH"      # bash
 ```
 ```powershell
-$env:PATH = "$PWD\..\gm81-clean\target\release;$PWD\target\release;" + $env:PATH   # PowerShell
+$env:PATH = "$PWD\..\instance\target\release;$PWD\target\release;" + $env:PATH   # PowerShell
 ```
 
 Alternatively, call the tools by path. Every command in this guide uses the bare tool

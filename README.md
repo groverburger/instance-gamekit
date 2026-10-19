@@ -80,8 +80,8 @@ You need [Rust](https://rustup.rs) and two checkouts side by side.
 
 ```sh
 # 1. Instance: the runner, IDE and gmk-check
-git clone https://github.com/groverburger/instance.git gm81-clean
-(cd gm81-clean && cargo build --release)
+git clone https://github.com/groverburger/instance.git
+(cd instance && cargo build --release)
 
 # 2. The gamekit: gmk-art, gmk-music, gmk-sounds
 git clone git@github.com:groverburger/instance-gamekit.git
@@ -90,19 +90,19 @@ cargo build --release
 scripts/fetch-soundfont.sh            # or scripts/fetch-soundfont.ps1 on Windows
 
 # 3. Put both tool folders on PATH
-export PATH="$PWD/../gm81-clean/target/release:$PWD/target/release:$PATH"
+export PATH="$PWD/../instance/target/release:$PWD/target/release:$PATH"
 ```
 
 <details>
 <summary>PowerShell</summary>
 
 ```powershell
-$env:PATH = "$PWD\..\gm81-clean\target\release;$PWD\target\release;" + $env:PATH
+$env:PATH = "$PWD\..\instance\target\release;$PWD\target\release;" + $env:PATH
 ```
 </details>
 
 The gamekit's crates use Instance's `instance-format` crate through the path
-`../gm81-clean`, set in `Cargo.toml`.
+`../instance`, set in `Cargo.toml`.
 
 ## Your first game
 
